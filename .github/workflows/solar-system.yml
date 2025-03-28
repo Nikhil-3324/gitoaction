@@ -1,33 +1,29 @@
-name: Solar System Workflow
+name: CI/CD Pipeline
 
-on: 
-  workflow_dispatch:
+on:
   push:
-    branches:
-      - main
-      - 'feature/*'
-    
-jobs:
-    unit-testing:
-        name: Unit Testing
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v4
+  workflow_dispatch:
 
-        - name: Setup NodeJS Version
-          uses: actions/setup-node@v3
-          with:
-            node-version: 20
+jobs:
+  docker-setup:
+    runs-on: ubuntu-latest
     
-        - name: Install Dependencies
-          run: npm install
-    
-        - name: Unit Testing
-          run: npm test
-          
-        - name: Archive Test Result
-          uses: actions/upload-artifact@v3
-          with:
-            name: Mocha-Test-Result
-            path: test-results.xml
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2 
+        
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2  # Setup Buildx for multi-platform builds
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-image .  # Build your Docker image with the tag "my-image"
+
+      - name: Run Docker container
+        run: |
+          docker run --name my-container -d my-image  # Run the container from the image in detached mode
+
+      - name: Verify Docker container is running
+        run: |
+          docker ps  # List running containers to verify it's running
+
