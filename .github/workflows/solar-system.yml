@@ -6,7 +6,7 @@ on:
 
 jobs:
   docker-setup:
-    runs-on: ubuntu-latest
+    runs-on: arc-small
     
     steps:
       - name: Check out code
