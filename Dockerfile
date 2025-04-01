@@ -1,17 +1,9 @@
-FROM node:18-alpine3.17
+FROM python:3.9-slim
 
-WORKDIR /usr/app
-
-COPY package*.json /usr/app/
-
-RUN npm install
+WORKDIR /app
 
 COPY . .
 
-ENV MONGO_URI=uriPlaceholder
-ENV MONGO_USERNAME=usernamePlaceholder
-ENV MONGO_PASSWORD=passwordPlaceholder
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 3000
-
-CMD [ "npm", "start" ]
+CMD ["python", "app.py"]
